@@ -21,35 +21,36 @@
     window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
   });
 
-  /* Footer sections collapse on phones and stay open on wider screens, where
-     the grid shows all four columns side by side. This listens for the
-     breakpoint itself rather than every resize event: phone browsers fire
-     resize whenever the address bar hides on scroll, which would otherwise
-     snap a section the reader just opened shut again. */
+  /* Footer sections are dropdowns on phones and plain columns on desktop.
+     The <details> panels are left permanently open and the phone collapse is
+     driven by a class instead, because the browser's own toggle was hiding
+     desktop columns on a stray click with no chevron to hint how to undo it.
+     Desktop visibility now depends on nothing but CSS. */
   const footerCols = document.querySelectorAll(".footer-col");
   const wideFooter = window.matchMedia("(min-width: 621px)");
-  const syncFooter = () => {
-    footerCols.forEach((col) => { col.open = wideFooter.matches; });
-  };
-  footerCols.forEach((col) => {
-    // On desktop the four columns are laid out side by side with no chevron, so
-    // a click on the heading must not collapse them: there would be no way to
-    // tell the links were hidden, or how to bring them back.
-    col.querySelector("summary").addEventListener("click", (e) => {
-      if (wideFooter.matches) e.preventDefault();
-    });
 
-    col.addEventListener("toggle", () => {
-      // Belt and braces: whatever closed it (keyboard, session restore), a
-      // desktop column always ends up open again.
-      if (wideFooter.matches) {
-        if (!col.open) col.open = true;
-        return;
-      }
-      if (!col.open) return;
-      // On phones, expanding the bottom section pushes its links below the
-      // fold, which reads as "nothing happened". Bring them into view, clear
-      // of the sticky action bar.
+  const setCollapsed = (col, collapsed) => {
+    col.classList.toggle("is-collapsed", collapsed);
+    col.querySelector("summary").setAttribute("aria-expanded", String(!collapsed));
+  };
+
+  const syncFooter = () => {
+    footerCols.forEach((col) => setCollapsed(col, !wideFooter.matches));
+  };
+
+  footerCols.forEach((col) => {
+    col.querySelector("summary").addEventListener("click", (e) => {
+      // Never let the browser toggle the panel shut.
+      e.preventDefault();
+      if (wideFooter.matches) return;
+
+      const expanding = col.classList.contains("is-collapsed");
+      setCollapsed(col, !expanding);
+      if (!expanding) return;
+
+      // Expanding the bottom section pushes its links below the fold, which
+      // reads as "nothing happened". Bring them into view, clear of the
+      // sticky action bar.
       requestAnimationFrame(() => {
         const hidden = col.getBoundingClientRect().bottom - (window.innerHeight - 96);
         if (hidden <= 0) return;
