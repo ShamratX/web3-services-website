@@ -1,0 +1,17 @@
+{
+  "name": "Shamrat — Web3 Engineering",
+  "short_name": "Shamrat",
+  "description": "Smart contract development, ICO and presale platforms, token launches and full-stack DApps for EVM chains.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060913",
+  "theme_color": "#060913",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
