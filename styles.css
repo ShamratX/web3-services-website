@@ -7,10 +7,14 @@
   --border-strong: rgba(255, 255, 255, 0.16);
   --text: #e8edf7;
   --muted: #93a1bd;
-  --faint: #64708c;
+  /* --faint was #64708c (4.0:1 on --bg), below the 4.5:1 WCAG AA floor it is
+     used at: card lists, chips and footer links. */
+  --faint: #7a86a3;
   --blue: #3b82f6;
   --cyan: #06b6d4;
   --violet: #7c3aed;
+  /* Readable stand-in for --violet, which is 3.5:1 as small label text. */
+  --violet-text: #a78bfa;
   --green: #10b981;
   --radius: 18px;
   --radius-lg: 26px;
@@ -41,6 +45,8 @@ body {
 }
 
 img { max-width: 100%; display: block; }
+/* Only 600 is loaded for bold body copy, so avoid synthesised faux-bold. */
+strong, b { font-weight: 600; }
 a { color: inherit; text-decoration: none; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 
@@ -830,7 +836,7 @@ p { margin: 0 0 1rem; }
   flex: none;
   font-family: var(--mono);
   font-size: 0.8rem;
-  color: var(--violet);
+  color: var(--violet-text);
   padding-top: 0.2rem;
 }
 .feature h3 { font-size: 1.02rem; margin-bottom: 0.35rem; }
@@ -916,7 +922,7 @@ p { margin: 0 0 1rem; }
   display: block;
   font-family: var(--mono);
   font-size: 0.85rem;
-  color: var(--violet);
+  color: var(--violet-text);
   margin-bottom: 0.9rem;
 }
 .step h3 { margin-bottom: 0.6rem; }
@@ -1351,6 +1357,23 @@ p { margin: 0 0 1rem; }
   .feature:hover { transform: none; }
   .btn, .filter { min-height: 44px; }
   .nav-link, .footer-col a { padding-block: 0.35rem; }
+}
+
+@media print {
+  .bg-grid, .bg-glow, .topbar, .site-header, .marquee, .hero-visual,
+  .filters, .contact-form, .footer-cta, .footer-social { display: none !important; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  a { color: #000; text-decoration: underline; }
+  .card, .project, .plan, .chain, .step, .stack-col, .feature, .panel, .contact-card {
+    border: 1px solid #bbb;
+    background: none;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .grad, .stat dd { -webkit-text-fill-color: #000; color: #000; }
+  .section { padding: 1.2rem 0; }
+  .faq details { border-color: #bbb; }
+  .faq details p { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {

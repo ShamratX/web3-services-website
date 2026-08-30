@@ -43,12 +43,18 @@ Add a new card by copying an existing `<article class="project reveal">` block a
 | File | Purpose |
 | --- | --- |
 | `index.html` | All page markup, meta tags and JSON-LD structured data |
-| `styles.css` | Dark Web3 theme, grid glow background, responsive layout |
+| `404.html` | Styled not-found page (GitHub Pages serves it automatically) |
+| `styles.css` | Dark Web3 theme, grid glow background, responsive + print layout |
 | `main.js` | Sticky header, mega-menu, mobile nav, scroll reveals, stat counters, portfolio filters, contact form |
+| `og-image.png` | 1200×630 social preview card |
+| `shamrat.jpg` | Locally hosted profile photo |
 | `favicon.svg` | Gradient diamond mark |
+| `apple-touch-icon.png` | 180×180 iOS home-screen icon |
+| `icon-192.png`, `icon-512.png` | PWA icons (512 doubles as maskable) |
 | `manifest.webmanifest` | PWA metadata |
 | `robots.txt` | Crawler rules + sitemap pointer |
-| `sitemap.xml` | Single-URL sitemap |
+| `sitemap.xml` | Sitemap with image extension |
+| `.nojekyll` | Skips Jekyll processing on GitHub Pages |
 
 ## Run locally
 
@@ -90,10 +96,24 @@ command empty and set the output directory to `/`.
 
 ## SEO checklist covered
 
-- Descriptive `<title>`, meta description and keywords
-- Open Graph + Twitter card tags
-- Canonical URL and `robots` directives
-- JSON-LD: `Person`, `ProfessionalService` with `OfferCatalog`, `WebSite`, `FAQPage`
-- Semantic landmarks, one `<h1>`, labelled sections, skip link
-- Lazy-loaded imagery, `font-display: swap`, preconnect hints
-- Mobile-first responsive layout and `prefers-reduced-motion` support
+- `<title>` at 58 characters and meta description at 150 — both inside Google's truncation limits
+- Keyword-led `<h2>` per section (smart contract development, Web3 DApp frontend, EVM chains, portfolio, FAQ)
+- Open Graph and Twitter cards with a real 1200×630 image, dimensions and alt text
+- Canonical URL, `robots` directives, `sitemap.xml` with image extension, `robots.txt`
+- JSON-LD: `Person`, `ProfessionalService` with an 8-item `OfferCatalog`, `WebSite`, `FAQPage`
+- Semantic landmarks, exactly one `<h1>`, labelled sections, skip link, no duplicate IDs
+- All assets self-hosted apart from Google Fonts; only the weights actually used are requested
+- Lazy-loaded imagery with explicit dimensions (no layout shift), `font-display: swap`, preconnect hints
+
+## Accessibility
+
+- All text meets WCAG AA contrast (verified: body 16.9:1, secondary 7.6:1, tertiary 5.5:1, accents 7.3–8.2:1)
+- 44px minimum tap targets on touch devices
+- Keyboard-operable mega-menu (click to open, Escape to close) and visible focus rings
+- `prefers-reduced-motion` disables every animation
+- Content remains fully visible without JavaScript
+
+## Performance
+
+Critical path is roughly 108KB uncompressed across HTML, CSS and JS — around 25KB gzipped — with no
+frameworks, no build step and no third-party scripts or trackers. The social image only loads for crawlers.
