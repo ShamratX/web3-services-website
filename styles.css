@@ -19,6 +19,8 @@
   --radius: 18px;
   --radius-lg: 26px;
   --shell: min(1280px, 100% - 2.5rem);
+  /* Every sentence of body copy on the page renders at this one size. */
+  --body-size: 1rem;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: "Space Grotesk", var(--font);
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
@@ -40,7 +42,13 @@ body {
   font-size: 16.5px;
   line-height: 1.7;
   letter-spacing: -0.005em;
+  /* `overflow-x: hidden` here turns body into a scroll container, which breaks
+     the sticky header in Safari: it scrolls away and only comes back at the top
+     of the page. `clip` hides the same overflow without creating that scroll
+     container, so the header stays pinned. `hidden` is left first as a fallback
+     for browsers without clip support. */
   overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -152,13 +160,31 @@ p { margin: 0 0 1rem; }
   /* Above the nav backdrop so the header bar and its sheet stay legible. */
   z-index: 110;
   padding: 1rem 0;
-  transition: background 0.3s ease, border-color 0.3s ease, padding 0.3s ease;
+  transition: border-color 0.3s ease, padding 0.3s ease;
   border-bottom: 1px solid transparent;
 }
-.site-header.is-stuck {
+/* The bar's tint and blur sit on their own promoted layer rather than on
+   .site-header itself. iOS Safari drops a sticky element mid-scroll — most
+   visibly when scrolling back up — when that same element paints a
+   backdrop-filter; its own compositing layer keeps the bar on screen. The
+   promotion cannot go on .site-header, because a transform there would make it
+   the containing block for the fixed mobile menu sheet nested inside it. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
   background: rgba(6, 9, 19, 0.82);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+.site-header.is-stuck::before { opacity: 1; }
+.site-header.is-stuck {
   border-bottom-color: var(--border);
   padding: 0.6rem 0;
 }
@@ -432,7 +458,6 @@ p { margin: 0 0 1rem; }
 }
 
 .lead {
-  font-size: clamp(1.03rem, 1.35vw, 1.16rem);
   color: var(--muted);
   max-width: 58ch;
   margin-top: 1.5rem;
@@ -623,7 +648,7 @@ p { margin: 0 0 1rem; }
   color: var(--cyan);
   margin-bottom: 0.85rem;
 }
-.section-sub { color: var(--muted); margin-top: 1.1rem; font-size: 1.03rem; }
+.section-sub { color: var(--muted); margin-top: 1.1rem; }
 
 .section-head--wide { max-width: 820px; }
 
@@ -710,12 +735,11 @@ p { margin: 0 0 1rem; }
 }
 .card-icon svg { width: 22px; height: 22px; }
 .card h3 { margin-bottom: 0.7rem; }
-.card p { color: var(--muted); font-size: 0.95rem; }
+.card p { color: var(--muted); }
 .card-list { margin-top: 1.1rem; display: grid; gap: 0.5rem; }
 .card-list li {
   position: relative;
   padding-left: 1.35rem;
-  font-size: 0.875rem;
   color: var(--faint);
 }
 .card-list li::before {
@@ -748,7 +772,7 @@ p { margin: 0 0 1rem; }
   color: var(--cyan);
   margin: 0.5rem 0 0.9rem;
 }
-.project p:not(.project-role) { color: var(--muted); font-size: 0.95rem; }
+.project p:not(.project-role) { color: var(--muted); }
 .tag {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -827,7 +851,7 @@ p { margin: 0 0 1rem; }
   box-shadow: 0 8px 20px -8px var(--c);
 }
 .chain h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-.chain p { color: var(--muted); font-size: 0.9rem; }
+.chain p { color: var(--muted); }
 .chain ul { display: grid; gap: 0.4rem; margin-top: 1rem; }
 .chain li {
   position: relative;
@@ -865,7 +889,7 @@ p { margin: 0 0 1rem; }
   padding-top: 0.2rem;
 }
 .feature h3 { font-size: 1.02rem; margin-bottom: 0.35rem; }
-.feature p { color: var(--muted); font-size: 0.92rem; margin: 0; }
+.feature p { color: var(--muted); margin: 0; }
 
 .panel {
   position: sticky;
@@ -882,7 +906,6 @@ p { margin: 0 0 1rem; }
 .check-list li {
   position: relative;
   padding-left: 1.7rem;
-  font-size: 0.9rem;
   color: var(--muted);
 }
 .check-list li::before {
@@ -925,7 +948,7 @@ p { margin: 0 0 1rem; }
   margin-bottom: 0.7rem;
 }
 .plan h3 { font-size: 1.28rem; margin-bottom: 0.6rem; }
-.plan > p { color: var(--muted); font-size: 0.94rem; }
+.plan > p { color: var(--muted); }
 .plan .check-list { margin-top: 1.1rem; margin-bottom: 1.7rem; }
 .plan .btn { margin-top: auto; }
 
@@ -951,7 +974,7 @@ p { margin: 0 0 1rem; }
   margin-bottom: 0.9rem;
 }
 .step h3 { margin-bottom: 0.6rem; }
-.step p { color: var(--muted); font-size: 0.92rem; margin: 0; }
+.step p { color: var(--muted); margin: 0; }
 
 /* ---------- stack ---------- */
 .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.3rem; }
@@ -1005,7 +1028,6 @@ p { margin: 0 0 1rem; }
   position: relative;
   padding-left: 1.6rem;
   color: var(--muted);
-  font-size: 0.95rem;
 }
 .about-points strong { color: var(--text); }
 .about-points li::before {
@@ -1090,12 +1112,43 @@ p { margin: 0 0 1rem; }
   margin: 0 0 0.5rem;
 }
 .member-note {
-  font-size: 0.85rem;
   color: var(--muted);
   margin: 0;
 }
 /* Roles carry a short label for the narrow phone cards. */
 .role-short { display: none; }
+
+/* ---------- one size for all body copy ----------
+   Descriptive paragraphs used to range from 0.85rem to 1.16rem depending on
+   which component they happened to sit in. They all resolve here instead, at
+   every breakpoint.
+
+   Labels (kickers, roles, tags, meta notes) keep their own smaller sizes on
+   purpose: they are labels, not prose. Every one of them carries a class,
+   while the descriptive paragraphs carry none, so :not([class]) separates the
+   two without having to list each label by hand. */
+.lead,
+.section-sub,
+.empty-state,
+.work-foot,
+.footer-blurb,
+.member-note,
+.about-points li,
+.check-list li,
+.card-list li,
+.card p:not([class]),
+.project p:not([class]),
+.chain p:not([class]),
+.feature p:not([class]),
+.plan > p:not([class]),
+.step p:not([class]),
+.about-copy p:not([class]),
+.contact-copy p:not([class]),
+.team-head p:not([class]),
+.faq details p:not([class]),
+.footer-cta p:not([class]) {
+  font-size: var(--body-size);
+}
 
 /* ---------- faq ---------- */
 .faq { display: grid; gap: 0.85rem; }
@@ -1130,7 +1183,6 @@ p { margin: 0 0 1rem; }
 .faq details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
 .faq details p {
   color: var(--muted);
-  font-size: 0.94rem;
   padding-bottom: 1.25rem;
   margin: 0;
   max-width: 68ch;
@@ -1261,7 +1313,7 @@ p { margin: 0 0 1rem; }
   box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
 }
 .footer-cta h2 { font-size: clamp(1.4rem, 2.6vw, 1.95rem); }
-.footer-cta p { color: var(--muted); margin: 0.5rem 0 0; font-size: 0.95rem; }
+.footer-cta p { color: var(--muted); margin: 0.5rem 0 0; }
 
 .footer-grid {
   display: grid;
@@ -1271,7 +1323,7 @@ p { margin: 0 0 1rem; }
   border-bottom: 1px solid var(--border);
 }
 .footer-brand .brand { margin-bottom: 1rem; }
-.footer-blurb { color: var(--faint); font-size: 0.87rem; max-width: 34ch; }
+.footer-blurb { color: var(--faint); max-width: 34ch; }
 .footer-social { display: flex; gap: 0.55rem; margin-top: 1.2rem; }
 .footer-social a {
   display: grid;
@@ -1745,7 +1797,6 @@ p { margin: 0 0 1rem; }
   .rail > * { flex: 0 0 86%; }
   .rail--narrow > * { flex: 0 0 74%; }
   h1 { font-size: 1.95rem; }
-  .lead { font-size: 0.98rem; }
   .eyebrow { font-size: 0.7rem; padding: 0.35rem 0.75rem; }
   .hero-trust { font-size: 0.74rem; }
   .stat { padding: 1.1rem 0.75rem; }
