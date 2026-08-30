@@ -1278,10 +1278,7 @@ p { margin: 0 0 1rem; }
   .topbar-msg { text-align: center; }
   .topbar-long { display: none; }
   .topbar-short { display: inline; }
-  .has-mega { display: contents; }
-  .nav-link--mega { display: none; }
   .nav-link--mobile { display: block; }
-  .mega { display: none; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-brand { grid-column: 1 / -1; }
   .footer-cta { margin-top: -2.5rem; }
@@ -1317,6 +1314,10 @@ p { margin: 0 0 1rem; }
   }
   .nav.is-open { transform: none; visibility: visible; }
   .nav .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
     padding: 0.95rem 0.15rem;
     font-family: var(--display);
     font-size: 1.2rem;
@@ -1326,6 +1327,51 @@ p { margin: 0 0 1rem; }
   }
   .nav .nav-link::after { display: none; }
   .nav-cta { margin-top: 1.4rem; padding-block: 0.95rem; font-size: 1rem; }
+
+  /* The desktop mega menu becomes a grouped, expandable section inside the
+     sheet, so phones get the same categorised service list. */
+  .has-mega { display: block; }
+  .nav-link--mega { text-align: left; background: none; cursor: pointer; }
+  .nav-link--mega svg {
+    width: 20px; height: 20px;
+    flex: none;
+    transition: transform 0.28s ease;
+  }
+  .nav-link--mega[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+  .mega {
+    position: static;
+    inset: auto;
+    display: none;
+    margin: 0;
+    padding: 0.4rem 0 0.9rem;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+  }
+  .mega.is-open { display: block; animation: sheetIn 0.28s ease both; }
+  @keyframes sheetIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+  .mega-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .mega-title { margin-bottom: 0.5rem; font-size: 0.64rem; }
+  .mega-col a {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .mega-col a + a { margin-top: 0.35rem; }
+  .mega-col strong { font-size: 0.95rem; }
+  .mega-col span { font-size: 0.8rem; }
+  .mega-promo { display: none; }
 
   .nav-extra { display: block; margin-top: auto; padding-top: 1.9rem; }
   .nav-extra-label {
@@ -1456,8 +1502,25 @@ p { margin: 0 0 1rem; }
   .filter { flex: none; }
 
   .stack-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem 1rem; }
-  .footer-col a { font-size: 0.84rem; }
+  /* Each footer group becomes its own labelled card with its links in two
+     columns, so every section stays visible and scannable on a phone. */
+  .footer-grid { grid-template-columns: 1fr; gap: 0.7rem; padding-bottom: 1.6rem; }
+  .footer-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 0.9rem;
+    padding: 1rem 1.05rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.022);
+  }
+  .footer-title {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .footer-col a { font-size: 0.85rem; color: var(--muted); }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 
   /* Density pass: stacked single-column content is long, so tighten the
@@ -1474,7 +1537,7 @@ p { margin: 0 0 1rem; }
   .marquee { margin-top: 2.2rem; }
   .contact-card { padding: 1.6rem 1.3rem; }
   .footer-cta { margin-bottom: 2.2rem; padding: 1.6rem 1.4rem; }
-  .footer-grid { gap: 1.6rem; padding-bottom: 1.8rem; }
+  .footer-grid { gap: 0.6rem; padding-bottom: 1.5rem; }
   .about-points, .check-list, .card-list { gap: 0.5rem; }
   .grid--2, .steps, .field-row { grid-template-columns: 1fr; }
   .float-card { display: none; }
