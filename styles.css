@@ -1027,6 +1027,7 @@ p { margin: 0 0 1rem; }
 }
 .team-head p { color: var(--muted); margin: 0; }
 
+/* The whole team stays on a single row at every width. */
 .team-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1068,6 +1069,7 @@ p { margin: 0 0 1rem; }
   position: absolute;
   left: 0.5rem;
   bottom: 0.5rem;
+  white-space: nowrap;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
   font-size: 0.68rem;
@@ -1092,6 +1094,8 @@ p { margin: 0 0 1rem; }
   color: var(--muted);
   margin: 0;
 }
+/* Roles carry a short label for the narrow phone cards. */
+.role-short { display: none; }
 
 /* ---------- faq ---------- */
 .faq { display: grid; gap: 0.85rem; }
@@ -1398,7 +1402,6 @@ p { margin: 0 0 1rem; }
 
 @media (max-width: 899px) {
   .grid--4, .grid--3 { grid-template-columns: repeat(2, 1fr); }
-  .team-grid { grid-template-columns: repeat(2, 1fr); }
   .steps, .chain-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1704,10 +1707,27 @@ p { margin: 0 0 1rem; }
   .footer-cta { margin-bottom: 2.2rem; padding: 1.6rem 1.4rem; }
   .footer-grid { gap: 1.6rem; padding-bottom: 1.8rem; }
   .about-points, .check-list, .card-list { gap: 0.5rem; }
-  /* Two across still fits two portraits comfortably on a phone, and keeps the
-     whole team visible without a long scroll. */
-  .member { padding: 0.6rem 0.6rem 0.8rem; }
-  .member-note { font-size: 0.8rem; }
+  /* Four across on a phone leaves each card only a quarter of the width, so
+     drop the card chrome and the blurb and give that space to the portrait.
+     Photo, name and role still read clearly at this size. */
+  .team-grid { gap: 0.5rem; }
+  .member {
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: center;
+  }
+  .member:hover { transform: none; }
+  .member-shot { margin-bottom: 0.5rem; border-radius: 12px; }
+  .member-note { display: none; }
+  .member-name { font-size: 0.82rem; margin-bottom: 0.1rem; }
+  .member-role { font-size: 0.66rem; line-height: 1.35; }
+  .role-full { display: none; }
+  .role-short { display: inline; }
+  /* A badge sitting on a quarter-width portrait covers the face, and the role
+     line already says who leads the team, so mark the lead with a ring instead. */
+  .member-tag { display: none; }
+  .member--lead .member-shot { border-color: rgba(34, 211, 238, 0.6); }
   .grid--2, .steps, .field-row { grid-template-columns: 1fr; }
   .float-card { display: none; }
   .hero-actions .btn { width: 100%; }
