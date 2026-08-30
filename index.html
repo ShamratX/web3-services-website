@@ -34,6 +34,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<script>document.documentElement.classList.add("js");</script>
 
 <script type="application/ld+json">
 {
@@ -194,12 +195,12 @@
               <a href="#services"><strong>Web3 Tooling</strong><span>Airdrops, multisender, batching</span></a>
               <a href="#services"><strong>Contract Review</strong><span>Pre-audit hardening</span></a>
               <a href="#chains"><strong>Multi-Chain Deployment</strong><span>7+ EVM networks</span></a>
-              <a href="#process"><strong>Launch Support</strong><span>On call through launch week</span></a>
+              <a href="#engagement"><strong>Retained Engineering</strong><span>Ongoing monthly support</span></a>
             </div>
             <div class="mega-promo">
               <p class="mega-title">Featured</p>
               <a class="mega-promo-card" href="#portfolio">
-                <strong>1000+ projects delivered</strong>
+                <strong>1,000+ projects delivered</strong>
                 <span>Browse the grouped portfolio — contracts, presales, DApps and tooling.</span>
                 <em>View portfolio →</em>
               </a>
@@ -210,7 +211,7 @@
 
       <a class="nav-link" href="#portfolio">Portfolio</a>
       <a class="nav-link" href="#chains">Chains</a>
-      <a class="nav-link" href="#process">Process</a>
+      <a class="nav-link" href="#engagement">Pricing</a>
       <a class="nav-link" href="#faq">FAQ</a>
       <a class="btn btn--sm btn--primary nav-cta" href="#contact">Start a project</a>
     </nav>
@@ -225,7 +226,7 @@
   <section class="hero" id="top">
     <div class="container hero-inner">
       <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> 1000+ Web3 projects delivered</p>
+        <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> 1,000+ Web3 projects delivered</p>
         <h1>Production-ready <span class="grad">Web3 infrastructure</span>, engineered end to end.</h1>
         <p class="lead">
           I'm Shamrat, a smart contract engineer and full-stack Web3 developer. I design, test and ship
@@ -282,7 +283,7 @@
 
     <div class="container">
       <dl class="stats reveal">
-        <div class="stat"><dt>Projects delivered</dt><dd data-count="1000">1000+</dd></div>
+        <div class="stat"><dt>Projects delivered</dt><dd data-count="1000">1,000+</dd></div>
         <div class="stat"><dt>Contracts deployed</dt><dd data-count="450">450+</dd></div>
         <div class="stat"><dt>EVM chains supported</dt><dd data-count="7">7+</dd></div>
         <div class="stat"><dt>Code ownership</dt><dd data-count="100">100%</dd></div>
@@ -425,20 +426,20 @@
     <div class="container">
       <header class="section-head section-head--wide reveal">
         <p class="kicker">Portfolio</p>
-        <h2 id="portfolio-title">1000+ projects, grouped so you can find yours</h2>
+        <h2 id="portfolio-title">1,000+ projects, grouped so you can find yours</h2>
         <p class="section-sub">
           Filter by what you're building. Every group below represents work already shipped — contracts on
           mainnet, sales that closed and DApps handling live users.
         </p>
       </header>
 
-      <div class="filters reveal" role="tablist" aria-label="Portfolio filters">
-        <button class="filter is-active" data-filter="all" role="tab" aria-selected="true">All work</button>
-        <button class="filter" data-filter="contracts" role="tab" aria-selected="false">Smart Contracts</button>
-        <button class="filter" data-filter="presale" role="tab" aria-selected="false">ICO &amp; Presale</button>
-        <button class="filter" data-filter="tokens" role="tab" aria-selected="false">Tokens</button>
-        <button class="filter" data-filter="dapps" role="tab" aria-selected="false">DApps &amp; Frontend</button>
-        <button class="filter" data-filter="tools" role="tab" aria-selected="false">Tools &amp; Automation</button>
+      <div class="filters reveal" role="group" aria-label="Filter portfolio by type of work">
+        <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">All work</button>
+        <button class="filter" type="button" data-filter="contracts" aria-pressed="false">Smart Contracts</button>
+        <button class="filter" type="button" data-filter="presale" aria-pressed="false">ICO &amp; Presale</button>
+        <button class="filter" type="button" data-filter="tokens" aria-pressed="false">Tokens</button>
+        <button class="filter" type="button" data-filter="dapps" aria-pressed="false">DApps &amp; Frontend</button>
+        <button class="filter" type="button" data-filter="tools" aria-pressed="false">Tools &amp; Automation</button>
       </div>
 
       <div class="grid grid--3" id="portfolioGrid">
@@ -721,7 +722,61 @@
     </div>
   </section>
 
-  <section class="section section--alt" id="stack" aria-labelledby="stack-title">
+  <section class="section section--alt" id="engagement" aria-labelledby="engagement-title">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="kicker">Working together</p>
+        <h2 id="engagement-title">Pick the engagement that fits your stage</h2>
+        <p class="section-sub">
+          Every option is milestone-based, so you approve and pay as work lands rather than up front.
+        </p>
+      </header>
+
+      <div class="grid grid--3">
+        <article class="plan reveal">
+          <p class="plan-tag">Single deliverable</p>
+          <h3>Fixed-scope build</h3>
+          <p>One clearly defined piece of work — a token, a staking contract, a mint page, an audit-prep review.</p>
+          <ul class="check-list">
+            <li>Written spec and fixed price</li>
+            <li>Test suite and deployment scripts</li>
+            <li>Verified on the target explorer</li>
+            <li>Typically 3 days to 2 weeks</li>
+          </ul>
+          <a class="btn btn--ghost btn--full" href="#contact">Scope a build</a>
+        </article>
+
+        <article class="plan plan--featured reveal">
+          <p class="plan-tag">Most requested</p>
+          <h3>Full launch package</h3>
+          <p>Contracts plus the DApp around them, delivered as one project so nothing falls between the layers.</p>
+          <ul class="check-list">
+            <li>Contract suite, tested and hardened</li>
+            <li>Next.js DApp with wallet integration</li>
+            <li>Admin dashboard and documentation</li>
+            <li>Multi-chain deployment</li>
+            <li>On call through launch week</li>
+          </ul>
+          <a class="btn btn--primary btn--full" href="#contact">Plan a launch</a>
+        </article>
+
+        <article class="plan reveal">
+          <p class="plan-tag">Ongoing</p>
+          <h3>Retained engineering</h3>
+          <p>A reserved block of time each month for teams shipping continuously or maintaining live protocols.</p>
+          <ul class="check-list">
+            <li>Priority response on live issues</li>
+            <li>New features and contract upgrades</li>
+            <li>Monitoring and gas tuning</li>
+            <li>Rolling monthly, cancel anytime</li>
+          </ul>
+          <a class="btn btn--ghost btn--full" href="#contact">Discuss a retainer</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stack" aria-labelledby="stack-title">
     <div class="container">
       <header class="section-head reveal">
         <p class="kicker">Tech stack</p>
@@ -750,7 +805,7 @@
     </div>
   </section>
 
-  <section class="section" id="about" aria-labelledby="about-title">
+  <section class="section section--alt" id="about" aria-labelledby="about-title">
     <div class="container about-inner">
       <div class="about-media reveal">
         <img src="https://avatars.githubusercontent.com/u/264260000?v=4" width="360" height="360" alt="Shamrat, smart contract engineer" loading="lazy" decoding="async" />
@@ -781,7 +836,7 @@
     </div>
   </section>
 
-  <section class="section section--alt" id="faq" aria-labelledby="faq-title">
+  <section class="section" id="faq" aria-labelledby="faq-title">
     <div class="container container--narrow">
       <header class="section-head reveal">
         <p class="kicker">FAQ</p>
@@ -964,6 +1019,7 @@
         <p class="footer-title" id="fc-company">More</p>
         <a href="#portfolio">Portfolio</a>
         <a href="#process">Process</a>
+        <a href="#engagement">Engagement</a>
         <a href="#stack">Tech Stack</a>
         <a href="#about">About</a>
         <a href="#faq">FAQ</a>

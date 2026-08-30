@@ -9,8 +9,11 @@ No build step, no dependencies — plain HTML, CSS and JavaScript, so it deploys
 ## Page sections
 
 Announcement top bar → header with Services mega-menu → hero + stats + tech marquee → 8 service cards →
-filterable portfolio → smart contracts by chain → Web3 DApp frontend → process → tech stack → about →
-FAQ → contact → multi-column footer with CTA banner.
+filterable portfolio → smart contracts by chain → Web3 DApp frontend → process → engagement models →
+tech stack → about → FAQ → contact → multi-column footer with CTA banner.
+
+Scroll-reveal animations are gated behind a `.js` class on `<html>`, so the page stays fully visible if
+JavaScript is blocked or fails. A 2.5s fallback timer also reveals anything an observer missed.
 
 Portfolio filtering is driven by the `data-cat` attribute on each `.project` card. Valid groups:
 `contracts`, `presale`, `tokens`, `dapps`, `tools` — space-separated, a card can belong to several.

@@ -62,6 +62,8 @@
 
   /* ---------- scroll reveals ---------- */
   const reveals = document.querySelectorAll(".reveal");
+  const revealAll = () => reveals.forEach((el) => el.classList.add("is-visible"));
+
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(
       (entries) => {
@@ -74,8 +76,21 @@
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
     reveals.forEach((el) => io.observe(el));
+
+    // A deep link lands mid-page, so reveal that section immediately and
+    // re-apply the jump once fonts and images have settled the layout.
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) {
+        target.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
+        target.classList.add("is-visible");
+        window.addEventListener("load", () => {
+          requestAnimationFrame(() => target.scrollIntoView({ block: "start", behavior: "instant" }));
+        });
+      }
+    }
   } else {
-    reveals.forEach((el) => el.classList.add("is-visible"));
+    revealAll();
   }
 
   /* ---------- animated stat counters ---------- */
@@ -120,7 +135,7 @@
       filters.forEach((f) => {
         const active = f === btn;
         f.classList.toggle("is-active", active);
-        f.setAttribute("aria-selected", String(active));
+        f.setAttribute("aria-pressed", String(active));
       });
 
       let shown = 0;
@@ -176,4 +191,7 @@
   });
 
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Safety net: nothing stays hidden if an observer never fires.
+  window.addEventListener("load", () => setTimeout(revealAll, 2500));
 })();
