@@ -37,9 +37,12 @@ python3 -m http.server 4321
 
 Then open http://localhost:4321.
 
-## Before you go live
+**Live:** https://shamratx.github.io/web3-services-website/
 
-The canonical URL is currently the placeholder `https://shamrat.dev/`. Replace it with your real domain in:
+## Moving to a custom domain
+
+The canonical URL is currently `https://shamratx.github.io/web3-services-website/`. To switch to your own
+domain, add a `CNAME` file containing the domain, point DNS at GitHub Pages, then replace the URL in:
 
 - `index.html` — `<link rel="canonical">`, `og:url`, and every `@id` / `url` inside the JSON-LD block
 - `robots.txt` — the `Sitemap:` line
