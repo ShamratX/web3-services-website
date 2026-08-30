@@ -1598,8 +1598,12 @@ p { margin: 0 0 1rem; }
     cursor: pointer;
   }
   .footer-title::after { display: block; }
-  .footer-col[open] .footer-title { color: var(--cyan); }
-  .footer-col[open] .footer-title::after {
+  /* Only this rule can hide footer links, and it lives inside the phone
+     breakpoint, so desktop columns are always visible no matter what state
+     the panel is left in. */
+  .footer-col.is-collapsed .footer-links { display: none; }
+  .footer-col:not(.is-collapsed) .footer-title { color: var(--cyan); }
+  .footer-col:not(.is-collapsed) .footer-title::after {
     transform: rotate(-135deg);
     border-color: var(--cyan);
   }
