@@ -42,11 +42,30 @@
 <link rel="stylesheet" href="styles.css" />
 <script>
   document.documentElement.classList.add("js");
-  /* Opt out of the browser restoring the old scroll position on reload, so a
-     refresh always starts at the top. Set here rather than in main.js because
-     it has to run before the browser attempts the restore. Deep links such as
-     /#contact still jump to their section: that is the hash, not a restore. */
+  /* A reload always starts at the top of the page, wherever the reader was.
+     Two separate things would otherwise put them back mid-page, and both have
+     to be handled here, before the browser acts on them.
+
+     1. Restoring the previous scroll position.
+     2. Jumping to the #section in the address bar, which is left there by the
+        menu links, so refreshing on a category would land back on it.
+
+     Dropping the hash on a reload only affects reloads: following a shared
+     link such as /#contact is a fresh navigation and still lands on that
+     section. */
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  var isReload = false;
+  try {
+    var entry = performance.getEntriesByType("navigation")[0];
+    if (entry) isReload = entry.type === "reload";
+    else if (performance.navigation) isReload = performance.navigation.type === 1;
+  } catch (e) {
+    /* Navigation Timing unavailable; treat it as a normal navigation. */
+  }
+  if (isReload && location.hash) {
+    history.replaceState(null, "", location.pathname + location.search);
+  }
 </script>
 
 <script type="application/ld+json">
