@@ -31,6 +31,23 @@
   const syncFooter = () => {
     footerCols.forEach((col) => { col.open = wideFooter.matches; });
   };
+  // Expanding the last section pushes its links below the fold, which reads as
+  // "nothing happened". Bring them into view, clear of the sticky action bar.
+  footerCols.forEach((col) => {
+    col.addEventListener("toggle", () => {
+      if (!col.open || wideFooter.matches) return;
+      requestAnimationFrame(() => {
+        const hidden = col.getBoundingClientRect().bottom - (window.innerHeight - 96);
+        if (hidden <= 0) return;
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({
+          top: window.scrollY + hidden,
+          behavior: reduced ? "auto" : "smooth",
+        });
+      });
+    });
+  });
+
   syncFooter();
   wideFooter.addEventListener("change", syncFooter);
   // Rotating a phone can cross the breakpoint; orientationchange fires for that
