@@ -11,15 +11,29 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  navToggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("is-open");
+  const backdrop = document.getElementById("navBackdrop");
+
+  const setNav = (open) => {
+    nav.classList.toggle("is-open", open);
     navToggle.setAttribute("aria-expanded", String(open));
-  });
+    navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    // Lock the page behind the sheet so only the menu scrolls.
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) {
+      backdrop.hidden = false;
+      requestAnimationFrame(() => backdrop.classList.add("is-open"));
+    } else {
+      backdrop.classList.remove("is-open");
+      setTimeout(() => { backdrop.hidden = true; }, 300);
+    }
+  };
+
+  navToggle.addEventListener("click", () => setNav(!nav.classList.contains("is-open")));
+  backdrop.addEventListener("click", () => setNav(false));
 
   nav.addEventListener("click", (e) => {
     if (e.target.closest("a")) {
-      nav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
+      setNav(false);
       closeMega();
     }
   });
@@ -56,8 +70,7 @@
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     closeMega();
-    nav.classList.remove("is-open");
-    navToggle.setAttribute("aria-expanded", "false");
+    setNav(false);
   });
 
   /* ---------- scroll reveals ---------- */
