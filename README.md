@@ -15,6 +15,25 @@ tech stack → about → FAQ → contact → multi-column footer with CTA banner
 Scroll-reveal animations are gated behind a `.js` class on `<html>`, so the page stays fully visible if
 JavaScript is blocked or fails. A 2.5s fallback timer also reveals anything an observer missed.
 
+## Responsive breakpoints
+
+Verified with zero horizontal overflow at 320, 360, 375, 390, 414, 480, 540, 600, 640, 768, 820, 834, 912,
+1024, 1180, 1280, 1366, 1440, 1600, 1920 and 2560px.
+
+| Range | Layout |
+| --- | --- |
+| ≤ 400px | Small phones: reduced type scale, tighter gutters, 40px social buttons |
+| ≤ 620px | Phones: single column everywhere, density pass on padding and gaps |
+| ≤ 860px | Hamburger nav (with a mobile-only Services link), stats and footer at 2 columns |
+| ≤ 899px | Hero stacks with the headline first, cards at 2 columns |
+| 900–1180px | Landscape tablets and small laptops: 3-column cards, two-column hero |
+| 1181–1699px | Full desktop: 4-column services and chains, 5-column footer |
+| ≥ 1700px | Wide shell (1480px) and slightly larger base font |
+| ≥ 2200px | Wider still (1640px) for 2K/4K monitors |
+
+Also handled: landscape phones under 520px tall hide the hero visual and top bar, `hover: none` devices drop
+hover-only transforms and enforce 44px tap targets, and `prefers-reduced-motion` disables all animation.
+
 Portfolio filtering is driven by the `data-cat` attribute on each `.project` card. Valid groups:
 `contracts`, `presale`, `tokens`, `dapps`, `tools` — space-separated, a card can belong to several.
 Add a new card by copying an existing `<article class="project reveal">` block and setting its `data-cat`.
