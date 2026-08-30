@@ -21,6 +21,16 @@
   --shell: min(1280px, 100% - 2.5rem);
   /* Every sentence of body copy on the page renders at this one size. */
   --body-size: 1rem;
+  /* The gradient on "smart contracts" in the headline. Shared with the primary
+     button so the two are the same colour by definition, not by copy. */
+  --brand-gradient: linear-gradient(105deg, #60a5fa, #22d3ee 45%, #a78bfa);
+  /* Primary action colour. Dark ink, not white: these are light tints meant
+     for text on a dark page, and white sits at 1.8:1 on the cyan midpoint.
+     Dark ink is 6.96:1 at its worst point. */
+  --cta: var(--brand-gradient);
+  --cta-ink: #04121c;
+  --cta-glow: rgba(34, 211, 238, 0.4);
+  --cta-glow-strong: rgba(34, 211, 238, 0.58);
   --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: "Space Grotesk", var(--font);
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
@@ -159,8 +169,10 @@ p { margin: 0 0 1rem; }
   top: 0;
   /* Above the nav backdrop so the header bar and its sheet stay legible. */
   z-index: 110;
-  padding: 1rem 0;
-  transition: padding 0.3s ease;
+  /* The compact height is used at every scroll position, not just once the
+     reader has scrolled: a bar that shrinks on the first scroll shifts the
+     whole page under their thumb. */
+  padding: 0.6rem 0;
   border-bottom: 1px solid var(--border);
 }
 /* The bar's tint and blur sit on their own promoted layer rather than on
@@ -185,9 +197,10 @@ p { margin: 0 0 1rem; }
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
-/* Scrolling only tightens the bar now that it is always filled in. */
+/* Scrolling no longer changes the bar's size, so it lifts off the page with a
+   shadow instead. */
 .site-header.is-stuck {
-  padding: 0.6rem 0;
+  box-shadow: 0 12px 30px -20px rgba(0, 0, 0, 0.95);
 }
 
 .header-inner {
@@ -398,11 +411,11 @@ p { margin: 0 0 1rem; }
 }
 .btn svg { width: 16px; height: 16px; }
 .btn--primary {
-  color: #fff;
-  background: linear-gradient(120deg, var(--blue), var(--violet));
-  box-shadow: 0 10px 30px -8px rgba(59, 130, 246, 0.6);
+  color: var(--cta-ink);
+  background: var(--cta);
+  box-shadow: 0 10px 30px -8px var(--cta-glow);
 }
-.btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -8px rgba(59, 130, 246, 0.75); }
+.btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -8px var(--cta-glow-strong); }
 .btn--ghost {
   color: var(--text);
   background: var(--surface-strong);
@@ -452,7 +465,7 @@ p { margin: 0 0 1rem; }
 }
 
 .grad {
-  background: linear-gradient(105deg, #60a5fa, #22d3ee 45%, #a78bfa);
+  background: var(--brand-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -684,11 +697,13 @@ p { margin: 0 0 1rem; }
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 .filter:hover { color: var(--text); border-color: var(--border-strong); transform: translateY(-2px); }
+/* The selected filter is the same kind of accent surface as the primary
+   button, so it follows the same token rather than keeping the old purple. */
 .filter.is-active {
-  color: #fff;
+  color: var(--cta-ink);
   border-color: transparent;
-  background: linear-gradient(120deg, var(--blue), var(--violet));
-  box-shadow: 0 8px 22px -8px rgba(59, 130, 246, 0.65);
+  background: var(--cta);
+  box-shadow: 0 8px 22px -8px var(--cta-glow);
 }
 
 .project.is-hidden { display: none; }
@@ -1002,12 +1017,79 @@ p { margin: 0 0 1rem; }
   align-items: center;
 }
 .about-media { position: relative; }
-.about-media img {
-  width: 100%;
+
+/* Multi-chain verification graphic. Shares the hero card's frame and palette
+   so the two read as one family, but uses a network motif rather than a second
+   code sample. Drawn as inline SVG: no image to download, and it stays sharp
+   at any size. */
+.av-panel {
+  position: relative;
+  padding: clamp(0.5rem, 2vw, 1rem);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-strong);
-  filter: saturate(1.05);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(124, 58, 237, 0.18), transparent 62%),
+    linear-gradient(165deg, rgba(20, 28, 48, 0.95), rgba(8, 12, 24, 0.95));
+  box-shadow: 0 40px 80px -35px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
 }
+/* Faint grid, fading out at the edges so it never competes with the diagram. */
+.av-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 76%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 76%);
+}
+.av-net { position: relative; display: block; width: 100%; height: auto; }
+.av-ring { fill: none; stroke: rgba(255, 255, 255, 0.075); }
+.av-links line { stroke: rgba(255, 255, 255, 0.1); stroke-width: 1; }
+/* A short dash runs each spoke in turn, reading as a transaction settling. */
+.av-pulse {
+  stroke: var(--cyan);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 9 112;
+  animation: av-travel 3.6s linear infinite;
+}
+@keyframes av-travel {
+  from { stroke-dashoffset: 121; }
+  to { stroke-dashoffset: 0; }
+}
+.av-nodes circle {
+  fill: rgba(10, 15, 30, 0.95);
+  stroke: var(--border-strong);
+  transition: stroke 0.25s ease;
+}
+.av-nodes g:hover circle { stroke: var(--cyan); }
+.av-nodes text {
+  fill: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.av-core {
+  fill: url(#avCore);
+  filter: drop-shadow(0 10px 24px rgba(34, 211, 238, 0.35));
+}
+.av-check {
+  fill: none;
+  stroke: #04121c;
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Floats over the panel's top edge rather than its left: the About column
+   starts at the container gutter, so a negative left offset would be clipped
+   by the viewport. */
+.av-float { top: -7%; left: 6%; animation-delay: -1.4s; }
+.av-float .float-icon { background: rgba(124, 58, 237, 0.18); color: #c084fc; }
 .about-badge {
   position: absolute;
   bottom: -18px; right: -14px;
@@ -1449,6 +1531,13 @@ p { margin: 0 0 1rem; }
   .panel { position: static; }
   .about-inner { grid-template-columns: 1fr; }
   .about-media { max-width: 320px; }
+  /* Overlapping a 320px-wide diagram would bury one of the chain nodes, so the
+     location badge sits below the panel once the columns stack. */
+  .about-badge {
+    position: static;
+    width: max-content;
+    margin-top: 0.9rem;
+  }
   .contact-card { grid-template-columns: 1fr; }
   .mega-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1475,8 +1564,8 @@ p { margin: 0 0 1rem; }
     bottom: calc(4.9rem + 0.55rem + env(safe-area-inset-bottom));
   }
   .stats { grid-template-columns: repeat(2, 1fr); }
-  .site-header { padding-top: calc(1rem + env(safe-area-inset-top)); }
-  .site-header.is-stuck { padding-top: calc(0.6rem + env(safe-area-inset-top)); }
+  /* Same compact padding, plus clearance for the notch. */
+  .site-header { padding-top: calc(0.6rem + env(safe-area-inset-top)); }
 
   /* Navigation becomes a full-height side sheet instead of a small dropdown. */
   .nav {
