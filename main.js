@@ -22,19 +22,20 @@
   });
 
   /* Footer sections collapse on phones and stay open on wider screens, where
-     the grid shows all four columns side by side. */
+     the grid shows all four columns side by side. This listens for the
+     breakpoint itself rather than every resize event: phone browsers fire
+     resize whenever the address bar hides on scroll, which would otherwise
+     snap a section the reader just opened shut again. */
   const footerCols = document.querySelectorAll(".footer-col");
+  const wideFooter = window.matchMedia("(min-width: 621px)");
   const syncFooter = () => {
-    const wide = window.innerWidth > 620;
-    footerCols.forEach((col) => { col.open = wide; });
+    footerCols.forEach((col) => { col.open = wideFooter.matches; });
   };
   syncFooter();
-
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(syncFooter, 150);
-  });
+  wideFooter.addEventListener("change", syncFooter);
+  // Rotating a phone can cross the breakpoint; orientationchange fires for that
+  // case only, so it cannot collapse a section mid-scroll the way resize did.
+  window.addEventListener("orientationchange", () => setTimeout(syncFooter, 100));
 
   const backdrop = document.getElementById("navBackdrop");
 
