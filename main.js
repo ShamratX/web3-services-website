@@ -31,11 +31,25 @@
   const syncFooter = () => {
     footerCols.forEach((col) => { col.open = wideFooter.matches; });
   };
-  // Expanding the last section pushes its links below the fold, which reads as
-  // "nothing happened". Bring them into view, clear of the sticky action bar.
   footerCols.forEach((col) => {
+    // On desktop the four columns are laid out side by side with no chevron, so
+    // a click on the heading must not collapse them: there would be no way to
+    // tell the links were hidden, or how to bring them back.
+    col.querySelector("summary").addEventListener("click", (e) => {
+      if (wideFooter.matches) e.preventDefault();
+    });
+
     col.addEventListener("toggle", () => {
-      if (!col.open || wideFooter.matches) return;
+      // Belt and braces: whatever closed it (keyboard, session restore), a
+      // desktop column always ends up open again.
+      if (wideFooter.matches) {
+        if (!col.open) col.open = true;
+        return;
+      }
+      if (!col.open) return;
+      // On phones, expanding the bottom section pushes its links below the
+      // fold, which reads as "nothing happened". Bring them into view, clear
+      // of the sticky action bar.
       requestAnimationFrame(() => {
         const hidden = col.getBoundingClientRect().bottom - (window.innerHeight - 96);
         if (hidden <= 0) return;
