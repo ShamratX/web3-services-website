@@ -22,6 +22,9 @@
     if (open) {
       backdrop.hidden = false;
       requestAnimationFrame(() => backdrop.classList.add("is-open"));
+      // Show the service categories straight away on phones instead of making
+      // people hunt for them behind another tap.
+      if (!window.matchMedia("(min-width: 861px)").matches) setMega(true);
     } else {
       backdrop.classList.remove("is-open");
       setTimeout(() => { backdrop.hidden = true; }, 300);
@@ -65,12 +68,21 @@
   });
 
   document.addEventListener("click", (e) => {
+    // On phones the sheet owns this state; a stray tap shouldn't collapse the
+    // categories, and the opening tap itself bubbles to here.
+    if (!isDesktop()) return;
     if (!wrapper.contains(e.target)) closeMega();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     closeMega();
     setNav(false);
+  });
+
+  // The sheet leaves the category list expanded on purpose. Collapse it if the
+  // viewport grows into desktop range, where it would become a floating panel.
+  window.addEventListener("resize", () => {
+    if (isDesktop() && !nav.classList.contains("is-open")) closeMega();
   });
 
   /* ---------- scroll reveals ---------- */
