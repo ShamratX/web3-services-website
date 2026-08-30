@@ -9,6 +9,16 @@
 
   const toTop = document.getElementById("toTop");
 
+  /* Backstop for the scrollRestoration opt-out in the page head: if a browser
+     restored the old position anyway, put the reader back at the top once the
+     layout has settled. Skipped when the URL names a section, so shared links
+     like /#pricing still land where they should. */
+  if (!location.hash) {
+    window.addEventListener("load", () => {
+      requestAnimationFrame(() => window.scrollTo(0, 0));
+    });
+  }
+
   const onScroll = () => {
     header.classList.toggle("is-stuck", window.scrollY > 12);
     toTop.classList.toggle("is-visible", window.scrollY > 700);
