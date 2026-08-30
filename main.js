@@ -161,6 +161,64 @@
     stats.forEach((el) => statObserver.observe(el));
   }
 
+  /* ---------- carousel dots ----------
+     The rails only scroll horizontally on phones, so each one gets a row of
+     dots showing how many cards there are and which one is in view. */
+  const railRebuilds = [];
+
+  document.querySelectorAll(".rail").forEach((rail) => {
+    const dots = document.createElement("div");
+    dots.className = "rail-dots";
+    dots.setAttribute("role", "group");
+    dots.setAttribute("aria-label", "Jump to a card");
+    rail.after(dots);
+
+    let cards = [];
+
+    const cardOffset = (card) =>
+      card.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
+
+    const markActive = () => {
+      if (!cards.length) return;
+      let active = 0;
+      let closest = Infinity;
+      cards.forEach((card, i) => {
+        const distance = Math.abs(cardOffset(card) - rail.scrollLeft);
+        if (distance < closest) { closest = distance; active = i; }
+      });
+      dots.querySelectorAll(".rail-dot").forEach((dot, i) => {
+        const on = i === active;
+        dot.classList.toggle("is-active", on);
+        if (on) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+    };
+
+    const build = () => {
+      cards = [...rail.children].filter((el) => !el.classList.contains("is-hidden"));
+      dots.textContent = "";
+      // A single card needs no indicator.
+      if (cards.length < 2) return;
+      cards.forEach((card, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "rail-dot";
+        const label = card.querySelector("h3");
+        dot.setAttribute("aria-label", label ? label.textContent.trim() : "Card " + (i + 1));
+        dot.addEventListener("click", () => {
+          rail.scrollTo({ left: cardOffset(card), behavior: "smooth" });
+        });
+        dots.appendChild(dot);
+      });
+      markActive();
+    };
+
+    build();
+    railRebuilds.push(build);
+    rail.addEventListener("scroll", markActive, { passive: true });
+    window.addEventListener("resize", markActive);
+  });
+
   /* ---------- portfolio filters ---------- */
   const filters = document.querySelectorAll(".filter");
   const projects = document.querySelectorAll("#portfolioGrid .project");
@@ -185,6 +243,8 @@
       });
 
       emptyState.hidden = shown > 0;
+      // The visible card count changed, so the dots have to follow.
+      railRebuilds.forEach((rebuild) => rebuild());
     });
   });
 
