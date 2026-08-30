@@ -7,9 +7,34 @@
   const megaToggle = document.getElementById("megaToggle");
   const mega = document.getElementById("mega");
 
-  const onScroll = () => header.classList.toggle("is-stuck", window.scrollY > 12);
+  const toTop = document.getElementById("toTop");
+
+  const onScroll = () => {
+    header.classList.toggle("is-stuck", window.scrollY > 12);
+    toTop.classList.toggle("is-visible", window.scrollY > 700);
+  };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+
+  toTop.addEventListener("click", () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  });
+
+  /* Footer sections collapse on phones and stay open on wider screens, where
+     the grid shows all four columns side by side. */
+  const footerCols = document.querySelectorAll(".footer-col");
+  const syncFooter = () => {
+    const wide = window.innerWidth > 620;
+    footerCols.forEach((col) => { col.open = wide; });
+  };
+  syncFooter();
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncFooter, 150);
+  });
 
   const backdrop = document.getElementById("navBackdrop");
 
@@ -22,9 +47,6 @@
     if (open) {
       backdrop.hidden = false;
       requestAnimationFrame(() => backdrop.classList.add("is-open"));
-      // Show the service categories straight away on phones instead of making
-      // people hunt for them behind another tap.
-      if (!window.matchMedia("(min-width: 861px)").matches) setMega(true);
     } else {
       backdrop.classList.remove("is-open");
       setTimeout(() => { backdrop.hidden = true; }, 300);
@@ -68,21 +90,12 @@
   });
 
   document.addEventListener("click", (e) => {
-    // On phones the sheet owns this state; a stray tap shouldn't collapse the
-    // categories, and the opening tap itself bubbles to here.
-    if (!isDesktop()) return;
     if (!wrapper.contains(e.target)) closeMega();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     closeMega();
     setNav(false);
-  });
-
-  // The sheet leaves the category list expanded on purpose. Collapse it if the
-  // viewport grows into desktop range, where it would become a floating panel.
-  window.addEventListener("resize", () => {
-    if (isDesktop() && !nav.classList.contains("is-open")) closeMega();
   });
 
   /* ---------- scroll reveals ---------- */

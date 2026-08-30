@@ -215,7 +215,9 @@ p { margin: 0 0 1rem; }
 .nav-link:hover { color: var(--text); }
 .nav-link:hover::after { width: 100%; }
 
-.nav-link--mobile { display: none; }
+.nav-link--mobile,
+.nav-link--extra,
+.nav-group-label { display: none; }
 
 .nav-link--mega {
   display: inline-flex;
@@ -1117,6 +1119,34 @@ p { margin: 0 0 1rem; }
 .form-note.is-ok { color: var(--green); }
 .form-note.is-error { color: #f87171; }
 
+/* ---------- back to top ---------- */
+.to-top {
+  position: fixed;
+  right: 1.15rem;
+  bottom: 1.35rem;
+  z-index: 92;
+  display: grid;
+  place-items: center;
+  width: 46px; height: 46px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: rgba(12, 17, 32, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--muted);
+  cursor: pointer;
+  box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.9);
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s,
+              color 0.2s ease, border-color 0.2s ease;
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { color: var(--cyan); border-color: var(--cyan); }
+.to-top svg { width: 20px; height: 20px; }
+
 /* ---------- sticky mobile action bar ---------- */
 .mobile-bar { display: none; }
 
@@ -1174,12 +1204,31 @@ p { margin: 0 0 1rem; }
 .footer-social a:hover { color: var(--cyan); border-color: var(--cyan); transform: translateY(-3px); }
 .footer-social svg { width: 17px; height: 17px; }
 
-.footer-col { display: flex; flex-direction: column; gap: 0.6rem; }
+/* Footer columns are <details> so they collapse into dropdowns on phones.
+   JavaScript forces them open above 620px, where the grid has room. */
+.footer-col { min-width: 0; }
+.footer-links { display: flex; flex-direction: column; gap: 0.6rem; }
 .footer-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   font-family: var(--display);
   font-weight: 600;
   font-size: 0.9rem;
   margin: 0 0 0.4rem;
+  list-style: none;
+  cursor: default;
+}
+.footer-title::-webkit-details-marker { display: none; }
+.footer-title::after {
+  content: "";
+  display: none;
+  width: 9px; height: 9px;
+  border-right: 2px solid var(--faint);
+  border-bottom: 2px solid var(--faint);
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
 }
 .footer-col a {
   font-size: 0.87rem;
@@ -1197,6 +1246,8 @@ p { margin: 0 0 1rem; }
   padding-top: 1.5rem;
 }
 .footer-bottom p { margin: 0; font-size: 0.8rem; color: var(--faint); }
+/* Leave room for the back-to-top button parked in the corner. */
+@media (min-width: 861px) { .footer-bottom { padding-right: 3.6rem; } }
 .footer-note { font-family: var(--mono); font-size: 0.75rem !important; }
 
 /* ---------- reveal ----------
@@ -1278,11 +1329,16 @@ p { margin: 0 0 1rem; }
   .topbar-msg { text-align: center; }
   .topbar-long { display: none; }
   .topbar-short { display: inline; }
-  .nav-link--mobile { display: block; }
+  .has-mega { display: contents; }
+  .nav-link--extra { display: block; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-brand { grid-column: 1 / -1; }
   .footer-cta { margin-top: -2.5rem; }
   .nav-toggle { display: block; }
+  .to-top {
+    /* Clear the sticky action bar. */
+    bottom: calc(4.9rem + 0.55rem + env(safe-area-inset-bottom));
+  }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .site-header { padding-top: calc(1rem + env(safe-area-inset-top)); }
   .site-header.is-stuck { padding-top: calc(0.6rem + env(safe-area-inset-top)); }
@@ -1314,10 +1370,6 @@ p { margin: 0 0 1rem; }
   }
   .nav.is-open { transform: none; visibility: visible; }
   .nav .nav-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
     padding: 0.95rem 0.15rem;
     font-family: var(--display);
     font-size: 1.2rem;
@@ -1328,21 +1380,19 @@ p { margin: 0 0 1rem; }
   .nav .nav-link::after { display: none; }
   .nav-cta { margin-top: 1.4rem; padding-block: 0.95rem; font-size: 1rem; }
 
-  /* The desktop mega menu becomes a grouped, expandable section inside the
-     sheet, so phones get the same categorised service list. */
-  .has-mega { display: block; }
-  .nav-link--mega { text-align: left; background: none; cursor: pointer; }
-  .nav-link--mega svg {
-    width: 20px; height: 20px;
-    flex: none;
-    transition: transform 0.28s ease;
+  /* The desktop mega menu becomes a grouped accordion inside the sheet, so the
+     service categories are reachable on a phone without duplicating markup. */
+  .nav-link--mega {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    text-align: left;
   }
-  .nav-link--mega[aria-expanded="true"] svg { transform: rotate(180deg); }
-
+  .nav-link--mega svg { width: 18px; height: 18px; flex: none; }
   .mega {
+    display: none;
     position: static;
     inset: auto;
-    display: none;
     margin: 0;
     padding: 0.4rem 0 0.9rem;
     border: 0;
@@ -1352,26 +1402,26 @@ p { margin: 0 0 1rem; }
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: none;
-    transform: none;
     opacity: 1;
     visibility: visible;
+    transform: none;
   }
-  .mega.is-open { display: block; animation: sheetIn 0.28s ease both; }
-  @keyframes sheetIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: none; }
-  }
-  .mega-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .mega-title { margin-bottom: 0.5rem; font-size: 0.64rem; }
-  .mega-col a {
-    padding: 0.6rem 0.7rem;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.02);
-  }
-  .mega-col a + a { margin-top: 0.35rem; }
-  .mega-col strong { font-size: 0.95rem; }
-  .mega-col span { font-size: 0.8rem; }
+  .mega.is-open { display: block; }
+  .mega-grid { grid-template-columns: 1fr; gap: 1.1rem; }
   .mega-promo { display: none; }
+  .mega-title { margin-bottom: 0.5rem; }
+  .mega-col a { padding: 0.5rem 0.6rem; }
+  .mega-col a + a { margin-top: 0.1rem; }
+
+  .nav-group-label {
+    display: block;
+    margin: 1.5rem 0 0.3rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
 
   .nav-extra { display: block; margin-top: auto; padding-top: 1.9rem; }
   .nav-extra-label {
@@ -1502,26 +1552,25 @@ p { margin: 0 0 1rem; }
   .filter { flex: none; }
 
   .stack-grid { grid-template-columns: repeat(2, 1fr); }
-  /* Each footer group becomes its own labelled card with its links in two
-     columns, so every section stays visible and scannable on a phone. */
-  .footer-grid { grid-template-columns: 1fr; gap: 0.7rem; padding-bottom: 1.6rem; }
-  .footer-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem 0.9rem;
-    padding: 1rem 1.05rem 1.1rem;
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.022);
-  }
-  .footer-title {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-size: 0.95rem;
-    color: var(--text);
-  }
-  .footer-col a { font-size: 0.85rem; color: var(--muted); }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+  /* Each footer section becomes a tappable dropdown row, so every desktop link
+     is still reachable without a wall of text. */
+  .footer-grid { grid-template-columns: 1fr; gap: 0; padding-bottom: 1.4rem; }
+  .footer-col { border-top: 1px solid var(--border); }
+  .footer-title {
+    margin: 0;
+    padding: 1rem 0.1rem;
+    cursor: pointer;
+  }
+  .footer-title::after { display: block; }
+  .footer-col[open] .footer-title { color: var(--cyan); }
+  .footer-col[open] .footer-title::after {
+    transform: rotate(-135deg);
+    border-color: var(--cyan);
+  }
+  .footer-links { gap: 0.15rem; padding: 0 0 1rem 0.1rem; }
+  .footer-col a { padding-block: 0.5rem; }
 
   /* Density pass: stacked single-column content is long, so tighten the
      spacing that only made sense across multiple columns. */
@@ -1537,7 +1586,7 @@ p { margin: 0 0 1rem; }
   .marquee { margin-top: 2.2rem; }
   .contact-card { padding: 1.6rem 1.3rem; }
   .footer-cta { margin-bottom: 2.2rem; padding: 1.6rem 1.4rem; }
-  .footer-grid { gap: 0.6rem; padding-bottom: 1.5rem; }
+  .footer-grid { gap: 1.6rem; padding-bottom: 1.8rem; }
   .about-points, .check-list, .card-list { gap: 0.5rem; }
   .grid--2, .steps, .field-row { grid-template-columns: 1fr; }
   .float-card { display: none; }
@@ -1596,7 +1645,8 @@ p { margin: 0 0 1rem; }
 
 @media print {
   .bg-grid, .bg-glow, .topbar, .site-header, .marquee, .hero-visual,
-  .filters, .contact-form, .footer-cta, .footer-social { display: none !important; }
+  .filters, .contact-form, .footer-cta, .footer-social,
+  .to-top, .mobile-bar { display: none !important; }
   body { background: #fff; color: #000; font-size: 11pt; }
   a { color: #000; text-decoration: underline; }
   .card, .project, .plan, .chain, .step, .stack-col, .feature, .panel, .contact-card {
