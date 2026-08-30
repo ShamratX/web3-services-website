@@ -40,7 +40,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
-<script>document.documentElement.classList.add("js");</script>
+<script>
+  document.documentElement.classList.add("js");
+  /* Opt out of the browser restoring the old scroll position on reload, so a
+     refresh always starts at the top. Set here rather than in main.js because
+     it has to run before the browser attempts the restore. Deep links such as
+     /#contact still jump to their section: that is the hash, not a restore. */
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+</script>
 
 <script type="application/ld+json">
 {
@@ -74,6 +81,13 @@
       "priceRange": "$$",
       "areaServed": "Worldwide",
       "founder": { "@id": "https://shamratx.github.io/web3-services-website/#person" },
+      "numberOfEmployees": { "@type": "QuantitativeValue", "value": 4 },
+      "employee": [
+        { "@id": "https://shamratx.github.io/web3-services-website/#person" },
+        { "@type": "Person", "name": "Hanif", "jobTitle": "Smart Contract Engineer", "image": "https://shamratx.github.io/web3-services-website/team-hanif.jpg" },
+        { "@type": "Person", "name": "Limon", "jobTitle": "Front-End & DApp Engineer", "image": "https://shamratx.github.io/web3-services-website/team-limon.jpg" },
+        { "@type": "Person", "name": "Arfin", "jobTitle": "QA & Contract Review", "image": "https://shamratx.github.io/web3-services-website/team-arfin.jpg" }
+      ],
       "serviceType": ["Smart Contract Development", "ICO and Presale Platform Development", "Token Development", "DeFi Protocol Development", "NFT Development", "Web3 DApp Frontend Development", "Smart Contract Testing"],
       "address": { "@type": "PostalAddress", "addressCountry": "BD" },
       "hasOfferCatalog": {
@@ -888,6 +902,55 @@
           <li><strong>No jargon.</strong> We explain what we built and why, in words you can repeat to your team.</li>
         </ul>
       </div>
+    </div>
+
+    <div class="container team-block">
+      <header class="team-head reveal">
+        <h3 id="team-title">The people you'll actually be working with</h3>
+        <p>
+          Four engineers, one team. No agency layer, no rotating cast — these are the same faces
+          from your first call to the day your contracts go live.
+        </p>
+      </header>
+
+      <ul class="team-grid" aria-labelledby="team-title">
+        <li class="member member--lead reveal">
+          <div class="member-shot">
+            <img src="team-shamrat.jpg" width="440" height="440" alt="Shamrat, founder and lead smart contract engineer" loading="lazy" decoding="async" />
+            <span class="member-tag">Team lead</span>
+          </div>
+          <h4 class="member-name">Shamrat</h4>
+          <p class="member-role">Founder &amp; Lead Smart Contract Engineer</p>
+          <p class="member-note">Writes and reviews the contracts that hold your users' money, and runs every project end to end.</p>
+        </li>
+
+        <li class="member reveal">
+          <div class="member-shot">
+            <img src="team-hanif.jpg" width="440" height="440" alt="Hanif, smart contract engineer" loading="lazy" decoding="async" />
+          </div>
+          <h4 class="member-name">Hanif</h4>
+          <p class="member-role">Smart Contract Engineer</p>
+          <p class="member-note">Builds tokens, presales and staking logic, then tries his hardest to break them before anyone else can.</p>
+        </li>
+
+        <li class="member reveal">
+          <div class="member-shot">
+            <img src="team-limon.jpg" width="440" height="440" alt="Limon, front-end and DApp engineer" loading="lazy" decoding="async" />
+          </div>
+          <h4 class="member-name">Limon</h4>
+          <p class="member-role">Front-End &amp; DApp Engineer</p>
+          <p class="member-note">Turns the contracts into something your users can actually use — wallets, mint pages and dashboards.</p>
+        </li>
+
+        <li class="member reveal">
+          <div class="member-shot">
+            <img src="team-arfin.jpg" width="440" height="440" alt="Arfin, quality assurance and contract review" loading="lazy" decoding="async" />
+          </div>
+          <h4 class="member-name">Arfin</h4>
+          <p class="member-role">QA &amp; Contract Review</p>
+          <p class="member-note">Tests every flow the way a real user would, and checks the details that are easy to miss on launch day.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
