@@ -1018,72 +1018,18 @@ p { margin: 0 0 1rem; }
 }
 .about-media { position: relative; }
 
-/* Multi-chain verification graphic. Shares the hero card's frame and palette
-   so the two read as one family, but uses a network motif rather than a second
-   code sample. Drawn as inline SVG: no image to download, and it stays sharp
-   at any size. */
-.av-panel {
-  position: relative;
-  padding: clamp(0.5rem, 2vw, 1rem);
+/* The About visual. This was an inline SVG network diagram; it is a rendered
+   image now, in the same navy/cyan/violet palette as the hero. It carries its
+   own frame and background, so no panel wrapper sits behind it. */
+.about-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-strong);
-  background:
-    radial-gradient(circle at 50% 45%, rgba(124, 58, 237, 0.18), transparent 62%),
-    linear-gradient(165deg, rgba(20, 28, 48, 0.95), rgba(8, 12, 24, 0.95));
-  box-shadow: 0 40px 80px -35px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  overflow: hidden;
-}
-/* Faint grid, fading out at the edges so it never competes with the diagram. */
-.av-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 34px 34px;
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 76%);
-  mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 76%);
-}
-.av-net { position: relative; display: block; width: 100%; height: auto; }
-.av-ring { fill: none; stroke: rgba(255, 255, 255, 0.075); }
-.av-links line { stroke: rgba(255, 255, 255, 0.1); stroke-width: 1; }
-/* A short dash runs each spoke in turn, reading as a transaction settling. */
-.av-pulse {
-  stroke: var(--cyan);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-dasharray: 9 112;
-  animation: av-travel 3.6s linear infinite;
-}
-@keyframes av-travel {
-  from { stroke-dashoffset: 121; }
-  to { stroke-dashoffset: 0; }
-}
-.av-nodes circle {
-  fill: rgba(10, 15, 30, 0.95);
-  stroke: var(--border-strong);
-  transition: stroke 0.25s ease;
-}
-.av-nodes g:hover circle { stroke: var(--cyan); }
-.av-nodes text {
-  fill: var(--muted);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-anchor: middle;
-  dominant-baseline: central;
-}
-.av-core {
-  fill: url(#avCore);
-  filter: drop-shadow(0 10px 24px rgba(34, 211, 238, 0.35));
-}
-.av-check {
-  fill: none;
-  stroke: #04121c;
-  stroke-width: 3.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  box-shadow: 0 40px 80px -35px rgba(0, 0, 0, 0.85);
 }
 /* Floats over the panel's top edge rather than its left: the About column
    starts at the container gutter, so a negative left offset would be clipped

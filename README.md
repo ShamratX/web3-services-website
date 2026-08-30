@@ -47,7 +47,9 @@ Add a new card by copying an existing `<article class="project reveal">` block a
 | `styles.css` | Dark Web3 theme, grid glow background, responsive + print layout |
 | `main.js` | Sticky header, mega-menu, mobile nav, scroll reveals, stat counters, portfolio filters, contact form |
 | `og-image.png` | 1200×630 social preview card |
-| `shamrat.jpg` | Locally hosted profile photo |
+| `about-web3.jpg` | Abstract Web3 visual in the About section |
+| `team-*.jpg` | Team member photos (440×440 squares) |
+| `shamrat.jpg` | Profile photo referenced by the JSON-LD structured data |
 | `favicon.svg` | Gradient diamond mark |
 | `apple-touch-icon.png` | 180×180 iOS home-screen icon |
 | `icon-192.png`, `icon-512.png` | PWA icons (512 doubles as maskable) |
