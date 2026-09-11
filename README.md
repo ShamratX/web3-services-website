@@ -1,20 +1,26 @@
 # Shamrat — Web3 Services Website
 
+[![Live](https://img.shields.io/badge/Live-GitHub%20Pages-2563EB)](https://shamratx.github.io/web3-services-website/)
+
 Static single-page site for **Shamrat** (`@ShamratX`) — Smart Contract Engineer and Full-Stack Web3 Developer. Plain HTML, CSS, and JavaScript. No build step, no npm dependencies.
 
 **Live:** https://shamratx.github.io/web3-services-website/
 
 ## Features
 
-- Service cards, filterable portfolio, chain highlights, FAQ, contact
+- Services, filterable portfolio, chains, process, FAQ, contact
 - Sticky header, mega-menu, mobile nav, scroll reveals
-- SEO basics: meta, Open Graph, sitemap, robots, PWA icons
-- Works with JS disabled (content stays visible)
+- SEO: meta, Open Graph, sitemap, robots, PWA icons
+- Content remains visible if JavaScript is disabled
+
+## How it works
+
+Static files served as-is. `main.js` enhances navigation, reveals, counters, portfolio filters (`data-cat`), and builds a `mailto:` contact draft. No backend API.
 
 ## Requirements
 
-- Any modern browser
-- Optional: Python 3 (local static server) or any static host
+- Modern browser
+- Optional: Python 3 or any static file server
 
 ## Quick start
 
@@ -24,41 +30,33 @@ cd web3-services-website
 python -m http.server 4321
 ```
 
-Open http://localhost:4321
-
-Or open `index.html` directly in a browser.
+Open http://localhost:4321 — or open `index.html` directly.
 
 ## Deploy
 
-Deploy the repo root as a static site (GitHub Pages, Cloudflare Pages, Netlify, etc.).
+Host the repo root on GitHub Pages, Cloudflare Pages, Netlify, etc. `.nojekyll` is included for GitHub Pages.
 
-GitHub Pages tip: `.nojekyll` is already included so assets are served as-is.
-
-### Custom domain
-
-Canonical URL today: `https://shamratx.github.io/web3-services-website/`
-
-1. Add a `CNAME` file with your domain and point DNS at GitHub Pages.
-2. Update the URL in:
-   - `index.html` — canonical, `og:url`, JSON-LD `@id` / `url`
-   - `robots.txt` — `Sitemap:`
-   - `sitemap.xml` — `<loc>`
+Custom domain: update canonical / `og:url` / JSON-LD / `robots.txt` / `sitemap.xml` URLs after DNS + `CNAME`.
 
 ## Project structure
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page markup + meta / JSON-LD |
+| `index.html` | Markup + SEO / JSON-LD |
 | `styles.css` | Theme + responsive layout |
-| `main.js` | Nav, reveals, filters, contact |
+| `main.js` | UI behavior |
 | `404.html` | Not-found page |
 | `manifest.webmanifest` | PWA metadata |
-| `robots.txt` / `sitemap.xml` | Crawlers |
-| `og-image.png` / `team-*.jpg` / icons | Media |
+| Media / icons | `og-image.png`, `team-*.jpg`, favicons |
 
-Portfolio cards use `data-cat` on `.project` articles. Groups: `contracts`, `presale`, `tokens`, `dapps`, `tools` (space-separated; a card can belong to several).
+Portfolio categories: `contracts`, `presale`, `tokens`, `dapps`, `tools`.
 
-## Notes
+## Limitations
 
-- Animations respect `prefers-reduced-motion`.
-- Edit copy and images in `index.html` / asset files — no framework rebuild needed.
+- Contact depends on the visitor’s email client (`mailto`).
+- Marketing copy in HTML is editorial, not computed metrics.
+- Canonical URLs currently assume the GitHub Pages path unless you change them.
+
+## License
+
+Content and assets for Shamrat’s public services site.
