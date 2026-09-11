@@ -61,8 +61,8 @@ Add a new card by copying an existing `<article class="project reveal">` block a
 ## Run locally
 
 ```bash
-cd web3-services-website
-python -m http.server 4321
+cd /Users/shamrat/Desktop/service
+python3 -m http.server 4321
 ```
 
 Then open http://localhost:4321.
